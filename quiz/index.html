@@ -1,0 +1,591 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Quick Quiz</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --bg: #f4f8f7;
+      --ink: #15201d;
+      --muted: #63736e;
+      --panel: #ffffff;
+      --line: #d8e4df;
+      --accent: #176b5d;
+      --accent-strong: #0f554b;
+      --warm: #d58a24;
+      --wrong: #b83b4a;
+      --right: #177f57;
+      --shadow: 0 18px 50px rgba(19, 45, 39, 0.12);
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Microsoft YaHei", Arial, sans-serif;
+      background:
+        linear-gradient(135deg, rgba(23, 107, 93, 0.12), transparent 42%),
+        radial-gradient(circle at top right, rgba(213, 138, 36, 0.16), transparent 30%),
+        var(--bg);
+      color: var(--ink);
+      line-height: 1.5;
+    }
+
+    button {
+      font: inherit;
+    }
+
+    .shell {
+      width: min(980px, calc(100% - 32px));
+      margin: 0 auto;
+      padding: 32px 0 44px;
+    }
+
+    .hero {
+      display: grid;
+      grid-template-columns: 1.1fr 0.9fr;
+      gap: 28px;
+      align-items: center;
+      min-height: 260px;
+    }
+
+    .eyebrow {
+      margin: 0 0 10px;
+      color: var(--accent);
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      font-size: 13px;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(38px, 7vw, 74px);
+      line-height: 0.96;
+      letter-spacing: 0;
+    }
+
+    .subtitle {
+      max-width: 620px;
+      margin: 18px 0 0;
+      color: var(--muted);
+      font-size: clamp(17px, 2vw, 20px);
+    }
+
+    .score-badge {
+      justify-self: end;
+      width: min(100%, 330px);
+      padding: 24px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: rgba(255, 255, 255, 0.82);
+      box-shadow: var(--shadow);
+    }
+
+    .score-badge strong {
+      display: block;
+      font-size: 46px;
+      line-height: 1;
+      color: var(--accent-strong);
+    }
+
+    .score-badge span {
+      display: block;
+      margin-top: 8px;
+      color: var(--muted);
+    }
+
+    .quiz {
+      margin-top: 22px;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 260px;
+      gap: 18px;
+      align-items: start;
+    }
+
+    .panel,
+    .side {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: var(--panel);
+      box-shadow: var(--shadow);
+    }
+
+    .panel {
+      padding: clamp(20px, 4vw, 34px);
+    }
+
+    .topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      margin-bottom: 22px;
+    }
+
+    .progress-label {
+      color: var(--muted);
+      font-size: 14px;
+      white-space: nowrap;
+    }
+
+    .meter {
+      flex: 1;
+      height: 10px;
+      overflow: hidden;
+      border-radius: 999px;
+      background: #e7efec;
+    }
+
+    .meter span {
+      display: block;
+      width: 0;
+      height: 100%;
+      border-radius: inherit;
+      background: linear-gradient(90deg, var(--accent), var(--warm));
+      transition: width 240ms ease;
+    }
+
+    .question {
+      min-height: 88px;
+      margin: 0 0 20px;
+      font-size: clamp(24px, 4vw, 36px);
+      line-height: 1.18;
+      letter-spacing: 0;
+    }
+
+    .answers {
+      display: grid;
+      gap: 12px;
+    }
+
+    .answer {
+      min-height: 56px;
+      padding: 14px 16px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #fbfdfc;
+      color: var(--ink);
+      cursor: pointer;
+      text-align: left;
+      transition: transform 160ms ease, border-color 160ms ease, background 160ms ease;
+    }
+
+    .answer:hover,
+    .answer:focus-visible {
+      border-color: var(--accent);
+      background: #f0f8f5;
+      transform: translateY(-1px);
+      outline: none;
+    }
+
+    .answer.correct {
+      border-color: rgba(23, 127, 87, 0.6);
+      background: rgba(23, 127, 87, 0.12);
+    }
+
+    .answer.incorrect {
+      border-color: rgba(184, 59, 74, 0.62);
+      background: rgba(184, 59, 74, 0.1);
+    }
+
+    .answer[disabled] {
+      cursor: default;
+      transform: none;
+    }
+
+    .feedback {
+      min-height: 58px;
+      margin: 20px 0 0;
+      color: var(--muted);
+    }
+
+    .actions {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      margin-top: 24px;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 44px;
+      padding: 10px 16px;
+      border: 1px solid transparent;
+      border-radius: 8px;
+      background: var(--accent);
+      color: #fff;
+      cursor: pointer;
+      font-weight: 700;
+    }
+
+    .btn:hover,
+    .btn:focus-visible {
+      background: var(--accent-strong);
+      outline: none;
+    }
+
+    .btn.secondary {
+      background: #fff;
+      color: var(--accent-strong);
+      border-color: var(--line);
+    }
+
+    .btn.secondary:hover,
+    .btn.secondary:focus-visible {
+      background: #eef7f4;
+    }
+
+    .btn[disabled] {
+      opacity: 0.45;
+      cursor: not-allowed;
+    }
+
+    .side {
+      padding: 18px;
+    }
+
+    .side h2 {
+      margin: 0 0 12px;
+      font-size: 18px;
+      letter-spacing: 0;
+    }
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
+    }
+
+    .stat {
+      min-height: 78px;
+      padding: 12px;
+      border-radius: 8px;
+      background: #f3f8f6;
+      border: 1px solid #e0ebe7;
+    }
+
+    .stat strong {
+      display: block;
+      font-size: 26px;
+      color: var(--accent-strong);
+      line-height: 1;
+    }
+
+    .stat span {
+      display: block;
+      margin-top: 8px;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .review {
+      margin-top: 18px;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .review ol {
+      padding-left: 20px;
+      margin: 10px 0 0;
+    }
+
+    .review li {
+      margin-bottom: 10px;
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    @media (max-width: 760px) {
+      .shell {
+        width: min(100% - 24px, 980px);
+        padding-top: 20px;
+      }
+
+      .hero,
+      .quiz {
+        grid-template-columns: 1fr;
+      }
+
+      .hero {
+        gap: 18px;
+        min-height: auto;
+      }
+
+      .score-badge {
+        justify-self: stretch;
+      }
+
+      .topbar,
+      .actions {
+        align-items: stretch;
+        flex-direction: column;
+      }
+
+      .progress-label {
+        white-space: normal;
+      }
+
+      .btn {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="shell">
+    <section class="hero" aria-labelledby="page-title">
+      <div>
+        <p class="eyebrow">Interactive quiz</p>
+        <h1 id="page-title">Quick Quiz</h1>
+        <p class="subtitle">10 道轻量通识题，答完立刻看分数和错题。适合手机上随手玩一轮。</p>
+      </div>
+      <aside class="score-badge" aria-live="polite">
+        <strong id="heroScore">0/10</strong>
+        <span id="heroMessage">准备好了就开始第一题。</span>
+      </aside>
+    </section>
+
+    <section class="quiz" aria-label="测验">
+      <div class="panel">
+        <div class="topbar">
+          <div class="meter" aria-hidden="true"><span id="meter"></span></div>
+          <div class="progress-label" id="progressText">第 1 / 10 题</div>
+        </div>
+        <h2 class="question" id="questionText"></h2>
+        <div class="answers" id="answers"></div>
+        <p class="feedback" id="feedback" aria-live="polite"></p>
+        <div class="actions">
+          <button class="btn secondary" id="restartBtn" type="button">重新开始</button>
+          <button class="btn" id="nextBtn" type="button" disabled>下一题</button>
+        </div>
+      </div>
+
+      <aside class="side">
+        <h2>本轮进度</h2>
+        <div class="stats">
+          <div class="stat">
+            <strong id="answeredCount">0</strong>
+            <span>已答</span>
+          </div>
+          <div class="stat">
+            <strong id="correctCount">0</strong>
+            <span>答对</span>
+          </div>
+        </div>
+        <div class="review" id="review">
+          答完后这里会显示需要复盘的题目。
+        </div>
+      </aside>
+    </section>
+  </main>
+
+  <script>
+    const questions = [
+      {
+        question: "地球上面积最大的海洋是哪一个？",
+        answers: ["太平洋", "大西洋", "印度洋", "北冰洋"],
+        correct: 0,
+        note: "太平洋覆盖面积最大，约占地球表面积的三分之一。"
+      },
+      {
+        question: "HTML 中用于创建超链接的标签是？",
+        answers: ["<link>", "<a>", "<href>", "<url>"],
+        correct: 1,
+        note: "<a> 标签配合 href 属性可以创建链接。"
+      },
+      {
+        question: "中国二十四节气中，通常表示春天开始的是？",
+        answers: ["清明", "立春", "谷雨", "惊蛰"],
+        correct: 1,
+        note: "立春是二十四节气之首，表示春季开始。"
+      },
+      {
+        question: "下列哪一种不是编程语言？",
+        answers: ["Python", "JavaScript", "HTML", "Go"],
+        correct: 2,
+        note: "HTML 是标记语言，用来描述网页结构。"
+      },
+      {
+        question: "光在真空中的传播速度约为每秒多少公里？",
+        answers: ["30 万公里", "3 万公里", "300 万公里", "3000 公里"],
+        correct: 0,
+        note: "光速约为每秒 299,792 公里，常记作 30 万公里每秒。"
+      },
+      {
+        question: "《西游记》中孙悟空的兵器是？",
+        answers: ["青龙偃月刀", "金箍棒", "方天画戟", "丈八蛇矛"],
+        correct: 1,
+        note: "孙悟空的兵器是如意金箍棒。"
+      },
+      {
+        question: "人体中负责泵送血液的器官是？",
+        answers: ["肺", "肝脏", "心脏", "肾脏"],
+        correct: 2,
+        note: "心脏通过收缩和舒张推动血液循环。"
+      },
+      {
+        question: "CSS 里控制文字颜色的属性是？",
+        answers: ["font-size", "color", "background", "display"],
+        correct: 1,
+        note: "color 属性用于设置文本颜色。"
+      },
+      {
+        question: "太阳系中距离太阳最近的行星是？",
+        answers: ["金星", "地球", "水星", "火星"],
+        correct: 2,
+        note: "水星是距离太阳最近的行星。"
+      },
+      {
+        question: "哪一个数字是质数？",
+        answers: ["21", "29", "39", "51"],
+        correct: 1,
+        note: "29 只能被 1 和 29 整除。"
+      }
+    ];
+
+    const state = {
+      index: 0,
+      score: 0,
+      answered: false,
+      mistakes: []
+    };
+
+    const els = {
+      heroScore: document.querySelector("#heroScore"),
+      heroMessage: document.querySelector("#heroMessage"),
+      meter: document.querySelector("#meter"),
+      progressText: document.querySelector("#progressText"),
+      questionText: document.querySelector("#questionText"),
+      answers: document.querySelector("#answers"),
+      feedback: document.querySelector("#feedback"),
+      nextBtn: document.querySelector("#nextBtn"),
+      restartBtn: document.querySelector("#restartBtn"),
+      answeredCount: document.querySelector("#answeredCount"),
+      correctCount: document.querySelector("#correctCount"),
+      review: document.querySelector("#review")
+    };
+
+    function renderQuestion() {
+      const item = questions[state.index];
+      state.answered = false;
+      els.questionText.textContent = item.question;
+      els.answers.innerHTML = "";
+      els.feedback.textContent = "请选择一个答案。";
+      els.nextBtn.disabled = true;
+      els.nextBtn.textContent = state.index === questions.length - 1 ? "查看结果" : "下一题";
+
+      item.answers.forEach((answer, answerIndex) => {
+        const button = document.createElement("button");
+        button.className = "answer";
+        button.type = "button";
+        button.textContent = answer;
+        button.addEventListener("click", () => selectAnswer(answerIndex));
+        els.answers.append(button);
+      });
+
+      updateStats();
+    }
+
+    function selectAnswer(answerIndex) {
+      if (state.answered) return;
+      state.answered = true;
+
+      const item = questions[state.index];
+      const isCorrect = answerIndex === item.correct;
+      const buttons = [...els.answers.querySelectorAll(".answer")];
+
+      buttons.forEach((button, index) => {
+        button.disabled = true;
+        if (index === item.correct) button.classList.add("correct");
+        if (index === answerIndex && !isCorrect) button.classList.add("incorrect");
+      });
+
+      if (isCorrect) {
+        state.score += 1;
+        els.feedback.textContent = `答对了。${item.note}`;
+      } else {
+        state.mistakes.push({
+          question: item.question,
+          selected: item.answers[answerIndex],
+          correct: item.answers[item.correct]
+        });
+        els.feedback.textContent = `这题选 ${item.answers[item.correct]}。${item.note}`;
+      }
+
+      els.nextBtn.disabled = false;
+      updateStats();
+    }
+
+    function updateStats(done = false) {
+      const answered = state.index + (state.answered ? 1 : 0);
+      const progress = done ? 100 : (state.index / questions.length) * 100;
+      els.meter.style.width = `${progress}%`;
+      els.progressText.textContent = done ? "已完成" : `第 ${state.index + 1} / ${questions.length} 题`;
+      els.heroScore.textContent = `${state.score}/${questions.length}`;
+      els.answeredCount.textContent = done ? questions.length : answered;
+      els.correctCount.textContent = state.score;
+
+      if (done) {
+        const percent = Math.round((state.score / questions.length) * 100);
+        els.heroMessage.textContent = percent >= 80 ? "手感很好，这轮很稳。" : percent >= 60 ? "不错，再刷一轮能更准。" : "先看错题，下一轮会更顺。";
+      } else {
+        els.heroMessage.textContent = state.answered ? "答案已记录，可以继续。" : "读题后选择一个答案。";
+      }
+    }
+
+    function showResults() {
+      els.questionText.textContent = "测验完成";
+      els.answers.innerHTML = "";
+      els.feedback.textContent = `你答对了 ${state.score} 题，共 ${questions.length} 题。`;
+      els.nextBtn.disabled = true;
+      els.nextBtn.textContent = "已完成";
+      updateStats(true);
+
+      if (state.mistakes.length === 0) {
+        els.review.textContent = "全对，没有需要复盘的题目。";
+        return;
+      }
+
+      const list = document.createElement("ol");
+      state.mistakes.forEach((mistake) => {
+        const item = document.createElement("li");
+        item.textContent = `${mistake.question} 你选了「${mistake.selected}」，正确答案是「${mistake.correct}」。`;
+        list.append(item);
+      });
+      els.review.innerHTML = "<strong>错题回顾</strong>";
+      els.review.append(list);
+    }
+
+    function nextQuestion() {
+      if (!state.answered) return;
+      if (state.index === questions.length - 1) {
+        showResults();
+        return;
+      }
+      state.index += 1;
+      renderQuestion();
+    }
+
+    function restart() {
+      state.index = 0;
+      state.score = 0;
+      state.answered = false;
+      state.mistakes = [];
+      els.review.textContent = "答完后这里会显示需要复盘的题目。";
+      renderQuestion();
+    }
+
+    els.nextBtn.addEventListener("click", nextQuestion);
+    els.restartBtn.addEventListener("click", restart);
+    renderQuestion();
+  </script>
+</body>
+</html>
