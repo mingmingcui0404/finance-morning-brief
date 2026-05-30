@@ -1,0 +1,307 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>财经信息汇总 - 2026-05-25</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --bg: #f5f7fb;
+      --panel: #ffffff;
+      --ink: #172033;
+      --muted: #657084;
+      --line: #dfe5ee;
+      --blue: #2357a6;
+      --green: #14785d;
+      --red: #b43d3d;
+      --gold: #a06512;
+      --shadow: 0 12px 30px rgba(24, 35, 55, 0.08);
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Microsoft YaHei", Arial, sans-serif;
+      background: var(--bg);
+      color: var(--ink);
+      line-height: 1.6;
+    }
+    a { color: var(--blue); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    .wrap { width: min(1120px, calc(100% - 32px)); margin: 0 auto; }
+    header {
+      background: #172033;
+      color: #fff;
+      padding: 34px 0 28px;
+      border-bottom: 4px solid #d89a2b;
+    }
+    .topline {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 18px;
+      flex-wrap: wrap;
+    }
+    h1 {
+      margin: 0;
+      font-size: clamp(28px, 4vw, 46px);
+      letter-spacing: 0;
+      line-height: 1.12;
+    }
+    .stamp { margin-top: 8px; color: #cbd5e1; font-size: 14px; }
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      min-height: 34px;
+      padding: 6px 12px;
+      border: 1px solid rgba(255, 255, 255, 0.28);
+      border-radius: 999px;
+      color: #f7fafc;
+      font-size: 14px;
+      white-space: nowrap;
+    }
+    .summary {
+      margin-top: 24px;
+      max-width: 900px;
+      font-size: 18px;
+      color: #edf2f7;
+    }
+    main { padding: 28px 0 44px; }
+    .grid {
+      display: grid;
+      grid-template-columns: 1.45fr 0.9fr;
+      gap: 18px;
+      align-items: start;
+    }
+    section {
+      margin-bottom: 18px;
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+    section h2 {
+      margin: 0;
+      padding: 16px 18px 12px;
+      font-size: 18px;
+      line-height: 1.35;
+      border-bottom: 1px solid var(--line);
+    }
+    .body { padding: 16px 18px 18px; }
+    .news { display: grid; gap: 12px; }
+    .item {
+      padding: 14px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #fbfcff;
+    }
+    .item h3 {
+      margin: 0 0 7px;
+      font-size: 16px;
+      line-height: 1.42;
+    }
+    .item p { margin: 0; color: var(--muted); font-size: 14px; }
+    .tagrow { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      min-height: 24px;
+      padding: 2px 8px;
+      border-radius: 999px;
+      background: #eef3fa;
+      color: #334155;
+      font-size: 12px;
+    }
+    .metrics {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+    }
+    .metric {
+      min-height: 86px;
+      padding: 12px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #fbfcff;
+    }
+    .metric .name { color: var(--muted); font-size: 13px; }
+    .metric .value {
+      margin-top: 4px;
+      font-size: 22px;
+      font-weight: 700;
+      line-height: 1.2;
+    }
+    .metric .note { margin-top: 4px; color: var(--muted); font-size: 12px; }
+    .up { color: var(--green); }
+    .down { color: var(--red); }
+    .watch { color: var(--gold); }
+    ul { margin: 0; padding-left: 20px; }
+    li + li { margin-top: 9px; }
+    .sources { display: grid; gap: 8px; font-size: 14px; }
+    .note {
+      padding: 12px 14px;
+      border-left: 4px solid #d89a2b;
+      background: #fff8eb;
+      color: #5f4630;
+      border-radius: 6px;
+      font-size: 14px;
+    }
+    footer { color: var(--muted); font-size: 12px; padding: 0 0 30px; }
+    @media (max-width: 860px) {
+      .grid { grid-template-columns: 1fr; }
+      .metrics { grid-template-columns: 1fr; }
+      header { padding-top: 28px; }
+      .badge { white-space: normal; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="wrap">
+      <div class="topline">
+        <div>
+          <h1>财经信息汇总</h1>
+          <div class="stamp">补充生成时间：2026-05-25 11:00 Asia/Shanghai</div>
+        </div>
+        <div class="badge">工作日 11:00 自动更新</div>
+      </div>
+      <p class="summary">一句话总览：全球风险偏好在中东和平希望带动下回暖，日股创高、美股期货偏强，油价与美元回落；中国资产关注外资流入、科技和绿电主线，同时需警惕地缘消息、利率预期和高位科技股波动。</p>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <div class="grid">
+      <div>
+        <section>
+          <h2>重点新闻与影响</h2>
+          <div class="body news">
+            <article class="item">
+              <h3>全球股市周一上涨，油价和美元因中东和平希望走弱</h3>
+              <p>路透报道，5月25日全球股市上涨，市场押注伊朗相关冲突有望缓和；但霍尔木兹海峡何时完全恢复仍是关键变量。风险偏好改善利好权益资产，油价回落则缓解通胀压力。</p>
+              <div class="tagrow"><span class="tag">全球股市</span><span class="tag">原油</span><span class="tag">地缘风险</span></div>
+            </article>
+
+            <article class="item">
+              <h3>东京股市创纪录，高科技与AI交易继续支撑全球权益</h3>
+              <p>亚洲市场受到风险情绪和科技股动能推动，日股表现突出。市场仍在把AI资本开支、强劲盈利和地缘缓和放在同一框架内定价，但高估值意味着回撤敏感度也更高。</p>
+              <div class="tagrow"><span class="tag">日本股市</span><span class="tag">AI</span><span class="tag">科技股</span></div>
+            </article>
+
+            <article class="item">
+              <h3>新浪财经早报关注外资扫货中国资产与A股三大主线</h3>
+              <p>新浪财经5月25日早报提到外资流入中国资产、机构看好A股主线等内容。对A股而言，增量资金、政策预期和盈利修复能否形成共振，是短线情绪延续的重点。</p>
+              <div class="tagrow"><span class="tag">A股</span><span class="tag">外资</span><span class="tag">中国资产</span></div>
+            </article>
+
+            <article class="item">
+              <h3>绿电、科技和高端制造主题继续吸引资金关注</h3>
+              <p>今日财经早报提及绿电资金流入、芯片散热材料等产业线索。主题投资活跃时，需区分政策景气、订单兑现和短期题材轮动，避免只追逐情绪扩散。</p>
+              <div class="tagrow"><span class="tag">绿电</span><span class="tag">半导体</span><span class="tag">高端制造</span></div>
+            </article>
+
+            <article class="item">
+              <h3>美元走弱带动非美货币反弹，人民币仍看中间价与资金流向</h3>
+              <p>路透盘中报道显示欧元、日元对美元走强，反映避险美元回吐近期涨幅。人民币短线仍取决于美元指数、国内政策预期和跨境资金流。</p>
+              <div class="tagrow"><span class="tag">美元</span><span class="tag">人民币</span><span class="tag">外汇</span></div>
+            </article>
+
+            <article class="item">
+              <h3>油价下行缓解输入型通胀，但供应恢复仍存在不确定性</h3>
+              <p>和平预期压低油价，但市场仍等待霍尔木兹海峡和运输通道的明确消息。若供应受阻持续，能源价格可能很快重新计入风险溢价。</p>
+              <div class="tagrow"><span class="tag">Brent</span><span class="tag">WTI</span><span class="tag">通胀</span></div>
+            </article>
+
+            <article class="item">
+              <h3>黄金短线承压于风险偏好改善，但避险配置逻辑仍未消失</h3>
+              <p>当权益上涨、美元走弱并存时，黄金可能出现双向拉扯。若地缘风险反复或美债实际利率下行，黄金仍可能获得中长期配置需求。</p>
+              <div class="tagrow"><span class="tag">黄金</span><span class="tag">避险</span><span class="tag">实际利率</span></div>
+            </article>
+          </div>
+        </section>
+      </div>
+
+      <aside>
+        <section>
+          <h2>主要市场指标</h2>
+          <div class="body">
+            <div class="note">口径说明：本页为5月25日补充生成版，部分美国市场仍以盘前/期货与最近收盘信息为主；请以交易所实时行情为准。</div>
+            <div class="metrics" style="margin-top:12px">
+              <div class="metric">
+                <div class="name">全球股市</div>
+                <div class="value up">风险偏好回暖</div>
+                <div class="note">中东和平希望推动股市上涨</div>
+              </div>
+              <div class="metric">
+                <div class="name">日经225</div>
+                <div class="value up">创纪录</div>
+                <div class="note">科技与风险偏好共振</div>
+              </div>
+              <div class="metric">
+                <div class="name">美元指数</div>
+                <div class="value down">回落</div>
+                <div class="note">避险需求降温，非美货币反弹</div>
+              </div>
+              <div class="metric">
+                <div class="name">原油</div>
+                <div class="value down">下滑</div>
+                <div class="note">和平预期压低风险溢价</div>
+              </div>
+              <div class="metric">
+                <div class="name">黄金</div>
+                <div class="value watch">震荡</div>
+                <div class="note">风险偏好与避险需求拉扯</div>
+              </div>
+              <div class="metric">
+                <div class="name">中国资产</div>
+                <div class="value watch">资金关注</div>
+                <div class="note">外资流入与政策主线待验证</div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section>
+          <h2>今日关注</h2>
+          <div class="body">
+            <ul>
+              <li>霍尔木兹海峡恢复进展，以及中东和平协议细节是否落地。</li>
+              <li>美股盘前科技股、AI链条和能源股对油价回落的反应。</li>
+              <li>A股外资流入是否延续，绿电、科技、高端制造能否扩散到盈利线索。</li>
+              <li>美元回落能否带动人民币和亚洲货币企稳。</li>
+              <li>本周美国通胀、就业、消费者信心和美联储官员讲话。</li>
+            </ul>
+          </div>
+        </section>
+
+        <section>
+          <h2>风险提示</h2>
+          <div class="body">
+            <ul>
+              <li>地缘消息可能快速反转，油价与避险资产会随之剧烈波动。</li>
+              <li>全球科技股估值较高，对利率和盈利预期变化敏感。</li>
+              <li>主题投资升温时，短线资金拥挤可能放大回撤。</li>
+              <li>本页为新闻与市场信息汇总，不构成投资建议。</li>
+            </ul>
+          </div>
+        </section>
+
+        <section>
+          <h2>参考来源</h2>
+          <div class="body sources">
+            <a href="https://www.investing.com/news/stock-market-news/stocks-rise-oil-and-dollar-slide-on-middle-east-peace-hopes-4708247" target="_blank" rel="noopener">Reuters via Investing.com：Stocks rise, oil and dollar slide on Middle East peace hopes</a>
+            <a href="https://www.marketscreener.com/news/stocks-rally-while-oil-and-dollar-ease-on-middle-east-peace-hopes-ce7f5adcd081f022" target="_blank" rel="noopener">MarketScreener / Reuters：Stocks rally, oil and dollar ease</a>
+            <a href="https://finance.sina.cn/zaobao/app.d.html" target="_blank" rel="noopener">新浪财经早报：2026年05月25日财经新闻早知道</a>
+            <a href="https://ssl-finance.sina.com.cn/" target="_blank" rel="noopener">新浪财经首页实时要闻</a>
+            <a href="https://finance.cnr.cn/" target="_blank" rel="noopener">央广网财经频道</a>
+          </div>
+        </section>
+      </aside>
+    </div>
+  </main>
+
+  <footer class="wrap">
+    本页由本地自动化任务补充生成。后续交易日版本会优先使用运行时可访问的最新新闻和市场数据，并覆盖更新此文件。
+  </footer>
+</body>
+</html>
