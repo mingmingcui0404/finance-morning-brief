@@ -1,0 +1,30 @@
+name: Update finance morning brief
+
+on:
+  schedule:
+    - cron: "0 3 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Generate finance brief
+        run: npm run generate
+
+      - name: Commit updated pages
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "Update daily finance brief"
+          file_pattern: "index.html finance-morning-brief.html"

@@ -1,0 +1,9 @@
+{
+  "name": "finance-morning-brief",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "generate": "node scripts/generate-brief.js"
+  }
+}
