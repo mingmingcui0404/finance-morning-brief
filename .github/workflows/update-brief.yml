@@ -27,4 +27,4 @@ jobs:
         uses: stefanzweifel/git-auto-commit-action@v5
         with:
           commit_message: "Update daily finance brief"
-          file_pattern: "index.html finance-morning-brief.html"
+          file_pattern: "index.html finance-morning-brief.html public/index.html public/finance-morning-brief.html"

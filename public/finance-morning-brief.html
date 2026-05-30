@@ -1,0 +1,293 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>财经信息汇总 - 2026-05-30</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --bg: #f5f7fb;
+      --panel: #ffffff;
+      --ink: #172033;
+      --muted: #657084;
+      --line: #dfe5ee;
+      --blue: #2357a6;
+      --green: #14785d;
+      --red: #b43d3d;
+      --gold: #a06512;
+      --shadow: 0 12px 30px rgba(24, 35, 55, 0.08);
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Microsoft YaHei", Arial, sans-serif;
+      background: var(--bg);
+      color: var(--ink);
+      line-height: 1.6;
+    }
+    a { color: var(--blue); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    .wrap { width: min(1120px, calc(100% - 32px)); margin: 0 auto; }
+    header {
+      background: #172033;
+      color: #fff;
+      padding: 34px 0 28px;
+      border-bottom: 4px solid #d89a2b;
+    }
+    .topline {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 18px;
+      flex-wrap: wrap;
+    }
+    h1 {
+      margin: 0;
+      font-size: clamp(28px, 4vw, 46px);
+      letter-spacing: 0;
+      line-height: 1.12;
+    }
+    .stamp { margin-top: 8px; color: #cbd5e1; font-size: 14px; }
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      min-height: 34px;
+      padding: 6px 12px;
+      border: 1px solid rgba(255, 255, 255, 0.28);
+      border-radius: 999px;
+      color: #f7fafc;
+      font-size: 14px;
+      white-space: nowrap;
+    }
+    .summary {
+      margin-top: 24px;
+      max-width: 900px;
+      font-size: 18px;
+      color: #edf2f7;
+    }
+    main { padding: 28px 0 44px; }
+    .grid {
+      display: grid;
+      grid-template-columns: 1.45fr 0.9fr;
+      gap: 18px;
+      align-items: start;
+    }
+    section {
+      margin-bottom: 18px;
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+    section h2 {
+      margin: 0;
+      padding: 16px 18px 12px;
+      font-size: 18px;
+      line-height: 1.35;
+      border-bottom: 1px solid var(--line);
+    }
+    .body { padding: 16px 18px 18px; }
+    .news { display: grid; gap: 12px; }
+    .item {
+      padding: 14px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #fbfcff;
+    }
+    .item h3 {
+      margin: 0 0 7px;
+      font-size: 16px;
+      line-height: 1.42;
+    }
+    .item p { margin: 0; color: var(--muted); font-size: 14px; }
+    .tagrow { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      min-height: 24px;
+      padding: 2px 8px;
+      border-radius: 999px;
+      background: #eef3fa;
+      color: #334155;
+      font-size: 12px;
+    }
+    .metrics {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+    }
+    .metric {
+      min-height: 86px;
+      padding: 12px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #fbfcff;
+    }
+    .metric .name { color: var(--muted); font-size: 13px; }
+    .metric .value {
+      margin-top: 4px;
+      font-size: 22px;
+      font-weight: 700;
+      line-height: 1.2;
+    }
+    .metric .note { margin-top: 4px; color: var(--muted); font-size: 12px; }
+    .up { color: var(--green); }
+    .down { color: var(--red); }
+    .watch { color: var(--gold); }
+    ul { margin: 0; padding-left: 20px; }
+    li + li { margin-top: 9px; }
+    .sources { display: grid; gap: 8px; font-size: 14px; }
+    .note {
+      padding: 12px 14px;
+      border-left: 4px solid #d89a2b;
+      background: #fff8eb;
+      color: #5f4630;
+      border-radius: 6px;
+      font-size: 14px;
+    }
+    footer { color: var(--muted); font-size: 12px; padding: 0 0 30px; }
+    @media (max-width: 860px) {
+      .grid { grid-template-columns: 1fr; }
+      .metrics { grid-template-columns: 1fr; }
+      header { padding-top: 28px; }
+      .badge { white-space: normal; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="wrap">
+      <div class="topline">
+        <div>
+          <h1>财经信息汇总</h1>
+          <div class="stamp">生成时间：2026-05-30 11:05 Asia/Shanghai</div>
+        </div>
+        <div class="badge">每天 11:00 自动更新</div>
+      </div>
+      <p class="summary">一句话总览：Student loan borrowers will have two new repayment options come July 1. Here&amp;apos;s how to pick one。今日重点关注全球风险偏好、美元与利率预期、中国资产资金流向，以及原油和黄金对宏观与地缘消息的反应。</p>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <div class="grid">
+      <div>
+        <section>
+          <h2>重点新闻与影响</h2>
+          <div class="body news">
+            <article class="item">
+              <h3><a href="https://www.cnbc.com/2026/05/29/student-loan-borrowers-new-repayment-plans.html" target="_blank" rel="noopener">Student loan borrowers will have two new repayment options come July 1. Here&amp;apos;s how to pick one</a></h3>
+              <p>Starting July 1, millions of federal student loan holders will have two new ways to repay their debt. Her... 影响利率预期、美元和全球风险资产定价。</p>
+              <div class="tagrow"><span class="tag">宏观</span><span class="tag">CNBC Markets</span><span class="tag">Fri, 29 May 2026 14:39:28 GMT</span></div>
+            </article>
+
+            <article class="item">
+              <h3><a href="https://www.marketwatch.com/story/oil-prices-slide-as-trump-says-the-u-s-is-close-to-an-iran-deal-8af9ece2?mod=mw_rss_topstories" target="_blank" rel="noopener">Oil slides, stocks climb as Trump puts off determination on Iran proposal</a></h3>
+              <p>A White House meeting Friday ended without a decision by the U.S. president. 关注资金风险偏好、估值压力和行业轮动。</p>
+              <div class="tagrow"><span class="tag">股市</span><span class="tag">MarketWatch</span><span class="tag">Fri, 29 May 2026 21:35:00 GMT</span></div>
+            </article>
+
+            <article class="item">
+              <h3><a href="https://www.cnbc.com/2026/05/30/hegseth-praises-asian-allies-for-burden-sharing-calls-out-china.html" target="_blank" rel="noopener">Hegseth praises Asian allies for &amp;apos;burden-sharing,&amp;apos; calls out China&amp;apos;s role in the region</a></h3>
+              <p>Hegseth said that China cannot impose its hegemony on U.S. partners and allies in the region. 关注政策落地、盈利修复与外资流向。</p>
+              <div class="tagrow"><span class="tag">中国资产</span><span class="tag">CNBC Markets</span><span class="tag">Sat, 30 May 2026 01:59:24 GMT</span></div>
+            </article>
+
+            <article class="item">
+              <h3><a href="https://www.cnbc.com/2026/05/29/oil-price-iran-deal-war-ceasefire-trump.html" target="_blank" rel="noopener">Brent oil price posts biggest monthly loss in six years as market counts on a U.S.-Iran deal</a></h3>
+              <p>Oil prices fell Friday after President Trump said he would meet in the White House Situation Room to make... 牵动输入型通胀、能源股和航空运输成本。</p>
+              <div class="tagrow"><span class="tag">原油</span><span class="tag">CNBC Markets</span><span class="tag">Fri, 29 May 2026 20:13:49 GMT</span></div>
+            </article>
+
+            <article class="item">
+              <h3><a href="https://www.marketwatch.com/story/a-mystery-man-tried-to-buy-playboys-high-end-lingerie-business-it-turned-out-to-all-be-a-scam-4d8c0ae9?mod=mw_rss_topstories" target="_blank" rel="noopener">A mystery man tried to buy Playboy&amp;#x2019;s high-end lingerie business. It turned out to all be a scam.</a></h3>
+              <p>Prosecutors say Kevin Juin used money he raised to buy the company Honey Birdette to purchase luxury watc... 可能影响市场情绪和短线交易主线。</p>
+              <div class="tagrow"><span class="tag">财经</span><span class="tag">MarketWatch</span><span class="tag">Fri, 29 May 2026 22:09:00 GMT</span></div>
+            </article>
+
+            <article class="item">
+              <h3><a href="https://www.marketwatch.com/story/gap-and-american-eagle-stock-are-both-getting-crushed-and-neither-retailer-is-blaming-the-economy-6290fa6a?mod=mw_rss_topstories" target="_blank" rel="noopener">Gap and American Eagle shares both get crushed &amp;#x2014; and neither retailer is blaming the economy</a></h3>
+              <p>Despite earnings that underwhelmed investors, executives at both Gap and American Eagle Outfitters said n... 可能影响市场情绪和短线交易主线。</p>
+              <div class="tagrow"><span class="tag">财经</span><span class="tag">MarketWatch</span><span class="tag">Fri, 29 May 2026 21:49:00 GMT</span></div>
+            </article>
+
+            <article class="item">
+              <h3><a href="https://www.marketwatch.com/story/servicenows-stock-soars-toward-historic-month-as-ai-fears-fade-across-software-31854b69?mod=mw_rss_topstories" target="_blank" rel="noopener">ServiceNow&amp;#x2019;s stock soars to a historic month as AI fears fade across software</a></h3>
+              <p>ServiceNow shares gained over 40% this month, leading an industrywide relief rally among enterprise softw... 关注资金风险偏好、估值压力和行业轮动。</p>
+              <div class="tagrow"><span class="tag">股市</span><span class="tag">MarketWatch</span><span class="tag">Fri, 29 May 2026 21:24:00 GMT</span></div>
+            </article>
+
+            <article class="item">
+              <h3><a href="https://www.marketwatch.com/story/dells-stunning-30-stock-rally-is-giving-a-big-boost-to-shares-of-other-server-makers-78292f16?mod=mw_rss_topstories" target="_blank" rel="noopener">Dell&amp;#x2019;s stunning 33% stock rally gave a big boost to shares of other server makers</a></h3>
+              <p>Dell&amp;#x2019;s blowout earnings report is highlighting how the AI buildout is also driving demand for old-... 关注资金风险偏好、估值压力和行业轮动。</p>
+              <div class="tagrow"><span class="tag">股市</span><span class="tag">MarketWatch</span><span class="tag">Fri, 29 May 2026 21:00:00 GMT</span></div>
+            </article>
+          </div>
+        </section>
+      </div>
+
+      <aside>
+        <section>
+          <h2>主要市场指标</h2>
+          <div class="body">
+            <div class="note">口径说明：本页由 GitHub Actions 定时生成，部分实时行情可能以新闻源和最近可用数据为准；请以交易所和官方发布为准。</div>
+            <div class="metrics" style="margin-top:12px">
+              <div class="metric"><div class="name">全球股市</div><div class="value up">偏暖</div><div class="note">关注美股、日股、港股和A股联动</div></div>
+              <div class="metric"><div class="name">美元指数</div><div class="value watch">观察</div><div class="note">影响人民币和大宗商品定价</div></div>
+              <div class="metric"><div class="name">美债收益率</div><div class="value watch">观察</div><div class="note">牵动成长股估值和黄金价格</div></div>
+              <div class="metric"><div class="name">原油</div><div class="value watch">波动</div><div class="note">关注供需、OPEC+和地缘消息</div></div>
+              <div class="metric"><div class="name">黄金</div><div class="value watch">观察</div><div class="note">受避险需求与实际利率共同影响</div></div>
+              <div class="metric"><div class="name">中国资产</div><div class="value watch">关注升温</div><div class="note">关注政策、盈利和跨境资金流</div></div>
+            </div>
+          </div>
+        </section>
+
+        <section>
+          <h2>今日关注</h2>
+          <div class="body">
+            <ul>
+              <li>美国通胀、就业、消费者信心与美联储官员表态。</li>
+              <li>中国政策落地、人民币汇率、A股与港股资金流向。</li>
+              <li>大型科技公司盈利、AI资本开支和半导体产业链消息。</li>
+              <li>原油、黄金和工业金属对美元、利率与地缘消息的反应。</li>
+              <li>重要公司业绩、监管变化和突发地缘事件。</li>
+            </ul>
+          </div>
+        </section>
+
+        <section>
+          <h2>风险提示</h2>
+          <div class="body">
+            <ul>
+              <li>新闻源发布时间和市场实时数据可能存在延迟。</li>
+              <li>宏观数据若显著偏离预期，股债汇商品可能同步放大波动。</li>
+              <li>地缘冲突、政策变化或流动性收缩可能快速改变资产定价。</li>
+              <li>本页为新闻与市场信息汇总，不构成投资建议。</li>
+            </ul>
+          </div>
+        </section>
+
+        <section>
+          <h2>参考来源</h2>
+          <div class="body sources">
+            <a href="https://news.google.com/topstories?topic=b" target="_blank" rel="noopener">Google News Business</a>
+
+            <a href="https://www.marketwatch.com/" target="_blank" rel="noopener">MarketWatch</a>
+
+            <a href="https://www.cnbc.com/markets/" target="_blank" rel="noopener">CNBC Markets</a>
+
+            <a href="https://news.google.com/search?q=markets%20stocks%20oil%20dollar" target="_blank" rel="noopener">Google News Markets</a>
+
+            <a href="https://www.caixin.com/finance/" target="_blank" rel="noopener">财新网</a>
+          </div>
+        </section>
+      </aside>
+    </div>
+  </main>
+
+  <footer class="wrap">
+    本页由 GitHub Actions 每天 11:00（Asia/Shanghai）定时生成，并通过 Cloudflare Pages 部署。
+  </footer>
+</body>
+</html>

@@ -1,9 +1,10 @@
-import { writeFile } from "node:fs/promises";
+import { mkdir, writeFile } from "node:fs/promises";
 import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 
 const TIME_ZONE = "Asia/Shanghai";
 const REPO_ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "..");
+const PUBLIC_DIR = resolve(REPO_ROOT, "public");
 const OUTPUT_FILES = ["index.html", "finance-morning-brief.html"];
 
 const sources = [
@@ -487,8 +488,12 @@ async function main() {
   const fetched = (await Promise.all(sources.map(fetchRss))).flat();
   const news = pickTopNews(dedupeNews(fetched)).concat(fallbackNews).slice(0, 8);
   const html = renderHtml(news);
-  await Promise.all(OUTPUT_FILES.map((file) => writeFile(resolve(REPO_ROOT, file), html, "utf8")));
-  console.log(`Generated ${OUTPUT_FILES.join(", ")} with ${news.length} news items.`);
+  await mkdir(PUBLIC_DIR, { recursive: true });
+  await Promise.all([
+    ...OUTPUT_FILES.map((file) => writeFile(resolve(PUBLIC_DIR, file), html, "utf8")),
+    ...OUTPUT_FILES.map((file) => writeFile(resolve(REPO_ROOT, file), html, "utf8"))
+  ]);
+  console.log(`Generated ${OUTPUT_FILES.join(", ")} in public/ and repo root with ${news.length} news items.`);
 }
 
 await main();
