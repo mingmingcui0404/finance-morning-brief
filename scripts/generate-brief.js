@@ -403,8 +403,14 @@ function renderHtml(news) {
   </style>
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7811689125079897"
      crossorigin="anonymous"></script>
+  <script async custom-element="amp-auto-ads"
+        src="https://cdn.ampproject.org/v0/amp-auto-ads-0.1.js">
+</script>
 </head>
 <body>
+  <amp-auto-ads type="adsense"
+        data-ad-client="ca-pub-7811689125079897">
+</amp-auto-ads>
   <header>
     <div class="wrap">
       <div class="topline">
