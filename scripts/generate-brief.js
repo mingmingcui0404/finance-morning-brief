@@ -410,7 +410,7 @@ function renderHtml(news) {
           <h1>财经信息汇总</h1>
           <div class="stamp">生成时间：${escapeHtml(dateTime)} Asia/Shanghai</div>
         </div>
-        <div class="badge">每天 11:00 自动更新</div>
+        <div class="badge">每天 08:00 自动更新</div>
       </div>
       <p class="summary">${escapeHtml(summary)}</p>
     </div>
@@ -477,7 +477,7 @@ function renderHtml(news) {
   </main>
 
   <footer class="wrap">
-    本页由 GitHub Actions 每天 11:00（Asia/Shanghai）定时生成，并通过 Cloudflare Pages 部署。
+    本页由 GitHub Actions 每天 08:00（Asia/Shanghai）定时生成，并通过 Cloudflare Pages 部署。
   </footer>
 </body>
 </html>
