@@ -3,16 +3,13 @@ import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 
 const TIME_ZONE = "Asia/Shanghai";
+const SITE_URL = "https://finance-morning-brief.pages.dev";
+const SITE_NAME = "Finance Daily Brief";
 const REPO_ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const PUBLIC_DIR = resolve(REPO_ROOT, "public");
 const OUTPUT_FILES = ["index.html", "finance-morning-brief.html"];
 
 const sources = [
-  {
-    name: "Google News Business",
-    url: "https://news.google.com/topstories?topic=b",
-    rss: "https://news.google.com/rss/headlines/section/topic/BUSINESS?hl=zh-CN&gl=US&ceid=US:zh-Hans"
-  },
   {
     name: "MarketWatch",
     url: "https://www.marketwatch.com/",
@@ -22,6 +19,11 @@ const sources = [
     name: "CNBC Markets",
     url: "https://www.cnbc.com/markets/",
     rss: "https://www.cnbc.com/id/100003114/device/rss/rss.html"
+  },
+  {
+    name: "Google News Business",
+    url: "https://news.google.com/topstories?topic=b",
+    rss: "https://news.google.com/rss/headlines/section/topic/BUSINESS?hl=zh-CN&gl=US&ceid=US:zh-Hans"
   },
   {
     name: "Google News Markets",
@@ -48,7 +50,7 @@ const fallbackNews = [
     link: "https://www.cnbc.com/markets/",
     source: "CNBC Markets",
     description: "大型科技公司盈利、AI资本开支和美债收益率变化，将继续影响成长股估值。",
-    category: "美股"
+    category: "股市"
   },
   {
     title: "中国资产关注政策落地、消费修复和资金流向",
@@ -190,13 +192,12 @@ function summarize(item) {
   return `${short} ${impact}`;
 }
 
-function formatDate(date, options = {}) {
+function formatDate(date) {
   return new Intl.DateTimeFormat("zh-CN", {
     timeZone: TIME_ZONE,
     year: "numeric",
     month: "2-digit",
-    day: "2-digit",
-    ...options
+    day: "2-digit"
   }).format(date).replaceAll("/", "-");
 }
 
@@ -212,6 +213,18 @@ function formatDateTime(date) {
   }).format(date).replaceAll("/", "-");
 }
 
+function isoInShanghai(date) {
+  return new Intl.DateTimeFormat("sv-SE", {
+    timeZone: TIME_ZONE,
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+    hour: "2-digit",
+    minute: "2-digit",
+    second: "2-digit"
+  }).format(date).replace(" ", "T") + "+08:00";
+}
+
 function marketTone(news) {
   const text = news.map((item) => `${item.title} ${item.description}`).join(" ").toLowerCase();
   return {
@@ -224,12 +237,19 @@ function marketTone(news) {
   };
 }
 
+function renderJsonLd(data) {
+  return `<script type="application/ld+json">${JSON.stringify(data).replaceAll("</", "<\\/")}</script>`;
+}
+
 function renderHtml(news) {
   const now = new Date();
   const date = formatDate(now);
   const dateTime = formatDateTime(now);
+  const isoDate = isoInShanghai(now);
   const tone = marketTone(news);
   const top = news[0];
+  const title = `Finance Daily Brief | 每日财经简报 ${date}`;
+  const description = `每日 08:00 更新的中文财经简报，汇总全球市场、A股港股、美股、外汇、原油、黄金、宏观经济与央行政策重点新闻。`;
   const summary = top
     ? `一句话总览：${top.title}。今日重点关注全球风险偏好、美元与利率预期、中国资产资金流向，以及原油和黄金对宏观与地缘消息的反应。`
     : "一句话总览：今日重点关注全球风险偏好、美元与利率预期、中国资产资金流向，以及原油和黄金对宏观与地缘消息的反应。";
@@ -244,12 +264,57 @@ function renderHtml(news) {
   const sourceLinks = sources.map((source) => `
             <a href="${escapeHtml(source.url)}" target="_blank" rel="noopener">${escapeHtml(source.name)}</a>`).join("\n");
 
+  const articleJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "NewsArticle",
+    "headline": title,
+    "description": description,
+    "datePublished": isoDate,
+    "dateModified": isoDate,
+    "inLanguage": "zh-CN",
+    "isAccessibleForFree": true,
+    "mainEntityOfPage": `${SITE_URL}/`,
+    "publisher": {
+      "@type": "Organization",
+      "name": SITE_NAME,
+      "url": SITE_URL
+    },
+    "about": ["财经新闻", "全球市场", "美股", "A股", "外汇", "原油", "黄金", "宏观经济"]
+  };
+
+  const websiteJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "name": SITE_NAME,
+    "url": SITE_URL,
+    "inLanguage": "zh-CN",
+    "description": description
+  };
+
   return `<!doctype html>
 <html lang="zh-CN">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>财经信息汇总 - ${escapeHtml(date)}</title>
+  <title>${escapeHtml(title)}</title>
+  <meta name="description" content="${escapeHtml(description)}">
+  <meta name="keywords" content="财经简报,财经新闻,每日财经,全球市场,A股,港股,美股,外汇,原油,黄金,宏观经济">
+  <meta name="robots" content="index,follow,max-snippet:-1,max-image-preview:large,max-video-preview:-1">
+  <meta name="theme-color" content="#172033">
+  <link rel="canonical" href="${SITE_URL}/">
+  <link rel="alternate" href="${SITE_URL}/finance-morning-brief.html" hreflang="zh-CN">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="${escapeHtml(SITE_NAME)}">
+  <meta property="og:title" content="${escapeHtml(title)}">
+  <meta property="og:description" content="${escapeHtml(description)}">
+  <meta property="og:url" content="${SITE_URL}/">
+  <meta property="article:published_time" content="${escapeHtml(isoDate)}">
+  <meta property="article:modified_time" content="${escapeHtml(isoDate)}">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="${escapeHtml(title)}">
+  <meta name="twitter:description" content="${escapeHtml(description)}">
+  ${renderJsonLd(articleJsonLd)}
+  ${renderJsonLd(websiteJsonLd)}
   <style>
     :root {
       color-scheme: light;
@@ -275,6 +340,8 @@ function renderHtml(news) {
     a { color: var(--blue); text-decoration: none; }
     a:hover { text-decoration: underline; }
     .wrap { width: min(1120px, calc(100% - 32px)); margin: 0 auto; }
+    .skip-link { position: absolute; left: -999px; top: 8px; background: #fff; color: var(--blue); padding: 8px 10px; z-index: 20; }
+    .skip-link:focus { left: 8px; }
     header {
       background: #172033;
       color: #fff;
@@ -311,6 +378,12 @@ function renderHtml(news) {
       max-width: 900px;
       font-size: 18px;
       color: #edf2f7;
+    }
+    .intro {
+      margin-top: 18px;
+      max-width: 920px;
+      color: #d7dee9;
+      font-size: 14px;
     }
     main { padding: 28px 0 44px; }
     .grid {
@@ -394,6 +467,7 @@ function renderHtml(news) {
       font-size: 14px;
     }
     footer { color: var(--muted); font-size: 12px; padding: 0 0 30px; }
+    .footer-links { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 8px; }
     @media (max-width: 860px) {
       .grid { grid-template-columns: 1fr; }
       .metrics { grid-template-columns: 1fr; }
@@ -401,42 +475,37 @@ function renderHtml(news) {
       .badge { white-space: normal; }
     }
   </style>
-  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7811689125079897"
-     crossorigin="anonymous"></script>
-  <script async custom-element="amp-auto-ads"
-        src="https://cdn.ampproject.org/v0/amp-auto-ads-0.1.js">
-</script>
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7811689125079897" crossorigin="anonymous"></script>
 </head>
 <body>
-  <amp-auto-ads type="adsense"
-        data-ad-client="ca-pub-7811689125079897">
-</amp-auto-ads>
+  <a class="skip-link" href="#main">跳到正文</a>
   <header>
     <div class="wrap">
       <div class="topline">
         <div>
-          <h1>财经信息汇总</h1>
+          <h1>Finance Daily Brief 每日财经简报</h1>
           <div class="stamp">生成时间：${escapeHtml(dateTime)} Asia/Shanghai</div>
         </div>
         <div class="badge">每天 08:00 自动更新</div>
       </div>
       <p class="summary">${escapeHtml(summary)}</p>
+      <p class="intro">本页聚合公开财经新闻源，面向关注全球市场、A股港股、美股、外汇、原油、黄金和宏观经济的读者，提供每日可快速浏览的市场信息摘要。</p>
     </div>
   </header>
 
-  <main class="wrap">
+  <main id="main" class="wrap">
     <div class="grid">
       <div>
-        <section>
-          <h2>重点新闻与影响</h2>
+        <section aria-labelledby="top-news">
+          <h2 id="top-news">重点新闻与影响</h2>
           <div class="body news">${newsCards}
           </div>
         </section>
       </div>
 
       <aside>
-        <section>
-          <h2>主要市场指标</h2>
+        <section aria-labelledby="market-indicators">
+          <h2 id="market-indicators">主要市场指标</h2>
           <div class="body">
             <div class="note">口径说明：本页由 GitHub Actions 定时生成，部分实时行情可能以新闻源和最近可用数据为准；请以交易所和官方发布为准。</div>
             <div class="metrics" style="margin-top:12px">
@@ -450,8 +519,8 @@ function renderHtml(news) {
           </div>
         </section>
 
-        <section>
-          <h2>今日关注</h2>
+        <section aria-labelledby="watch-list">
+          <h2 id="watch-list">今日关注</h2>
           <div class="body">
             <ul>
               <li>美国通胀、就业、消费者信心与美联储官员表态。</li>
@@ -463,8 +532,8 @@ function renderHtml(news) {
           </div>
         </section>
 
-        <section>
-          <h2>风险提示</h2>
+        <section aria-labelledby="risk-note">
+          <h2 id="risk-note">风险提示</h2>
           <div class="body">
             <ul>
               <li>新闻源发布时间和市场实时数据可能存在延迟。</li>
@@ -475,8 +544,8 @@ function renderHtml(news) {
           </div>
         </section>
 
-        <section>
-          <h2>参考来源</h2>
+        <section aria-labelledby="sources">
+          <h2 id="sources">参考来源</h2>
           <div class="body sources">${sourceLinks}
           </div>
         </section>
@@ -486,10 +555,87 @@ function renderHtml(news) {
 
   <footer class="wrap">
     本页由 GitHub Actions 每天 08:00（Asia/Shanghai）定时生成，并通过 Cloudflare Pages 部署。
+    <div class="footer-links">
+      <a href="/about.html">关于本站</a>
+      <a href="/privacy.html">隐私政策</a>
+      <a href="/sitemap.xml">Sitemap</a>
+    </div>
   </footer>
 </body>
 </html>
 `;
+}
+
+function renderAboutPage() {
+  return `<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>关于本站 | Finance Daily Brief</title>
+  <meta name="description" content="Finance Daily Brief 是每日自动更新的中文财经信息摘要网站，聚合公开财经新闻源并提供市场重点解读。">
+  <link rel="canonical" href="${SITE_URL}/about.html">
+</head>
+<body>
+  <main style="max-width:760px;margin:40px auto;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Microsoft YaHei',Arial,sans-serif;line-height:1.7;padding:0 16px;color:#172033">
+    <h1>关于本站</h1>
+    <p>Finance Daily Brief 每日财经简报聚合公开财经新闻源，帮助读者快速了解全球市场、A股港股、美股、外汇、原油、黄金和宏观经济重点。</p>
+    <p>本站内容由自动化程序定时生成，仅用于信息整理和学习参考，不构成投资建议。</p>
+    <p><a href="/">返回首页</a></p>
+  </main>
+</body>
+</html>
+`;
+}
+
+function renderPrivacyPage() {
+  return `<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>隐私政策 | Finance Daily Brief</title>
+  <meta name="description" content="Finance Daily Brief 隐私政策，说明本站如何使用统计、广告及第三方服务。">
+  <link rel="canonical" href="${SITE_URL}/privacy.html">
+</head>
+<body>
+  <main style="max-width:760px;margin:40px auto;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Microsoft YaHei',Arial,sans-serif;line-height:1.7;padding:0 16px;color:#172033">
+    <h1>隐私政策</h1>
+    <p>本站不要求用户注册，也不主动收集姓名、电话等个人身份信息。</p>
+    <p>本站可能使用 Google AdSense 等第三方广告服务。第三方服务可能使用 Cookie 或类似技术展示广告、衡量效果或防止滥用。用户可通过浏览器设置管理 Cookie。</p>
+    <p>本站页面包含指向第三方新闻源的链接。访问第三方网站时，请以对应网站的隐私政策为准。</p>
+    <p><a href="/">返回首页</a></p>
+  </main>
+</body>
+</html>
+`;
+}
+
+function renderRobots() {
+  return `User-agent: *
+Allow: /
+
+Sitemap: ${SITE_URL}/sitemap.xml
+`;
+}
+
+function renderSitemap() {
+  const today = formatDate(new Date());
+  return `<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url><loc>${SITE_URL}/</loc><lastmod>${today}</lastmod><changefreq>daily</changefreq><priority>1.0</priority></url>
+  <url><loc>${SITE_URL}/finance-morning-brief.html</loc><lastmod>${today}</lastmod><changefreq>daily</changefreq><priority>0.8</priority></url>
+  <url><loc>${SITE_URL}/about.html</loc><lastmod>${today}</lastmod><changefreq>monthly</changefreq><priority>0.4</priority></url>
+  <url><loc>${SITE_URL}/privacy.html</loc><lastmod>${today}</lastmod><changefreq>yearly</changefreq><priority>0.3</priority></url>
+</urlset>
+`;
+}
+
+async function writeBothRoots(file, content) {
+  await Promise.all([
+    writeFile(resolve(PUBLIC_DIR, file), content, "utf8"),
+    writeFile(resolve(REPO_ROOT, file), content, "utf8")
+  ]);
 }
 
 async function main() {
@@ -497,11 +643,15 @@ async function main() {
   const news = pickTopNews(dedupeNews(fetched)).concat(fallbackNews).slice(0, 8);
   const html = renderHtml(news);
   await mkdir(PUBLIC_DIR, { recursive: true });
+  await Promise.all(OUTPUT_FILES.map((file) => writeBothRoots(file, html)));
   await Promise.all([
-    ...OUTPUT_FILES.map((file) => writeFile(resolve(PUBLIC_DIR, file), html, "utf8")),
-    ...OUTPUT_FILES.map((file) => writeFile(resolve(REPO_ROOT, file), html, "utf8"))
+    writeBothRoots("about.html", renderAboutPage()),
+    writeBothRoots("privacy.html", renderPrivacyPage()),
+    writeBothRoots("robots.txt", renderRobots()),
+    writeBothRoots("sitemap.xml", renderSitemap()),
+    writeBothRoots("ads.txt", "google.com, pub-7811689125079897, DIRECT, f08c47fec0942fa0\n")
   ]);
-  console.log(`Generated ${OUTPUT_FILES.join(", ")} in public/ and repo root with ${news.length} news items.`);
+  console.log(`Generated ${OUTPUT_FILES.join(", ")} plus SEO support files with ${news.length} news items.`);
 }
 
 await main();

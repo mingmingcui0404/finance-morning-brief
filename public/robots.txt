@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://finance-morning-brief.pages.dev/sitemap.xml
