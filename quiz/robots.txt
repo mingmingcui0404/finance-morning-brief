@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://quick-quiz-c6f.pages.dev/sitemap.xml
